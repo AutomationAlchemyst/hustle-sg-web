@@ -3,434 +3,531 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hustle SG</title>
+    <title>Hustle SG // NEO</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        /* --- MOBILE POLISH CSS --- */
+        /* --- NEOBRUTALIST VARIABLES --- */
+        :root {
+            --bg-color: #e0e7ff; /* Light Indigo */
+            --accent-pink: #ff90e8;
+            --accent-lime: #b8ff01;
+            --accent-cyan: #23f0c7;
+            --accent-yellow: #ffce00;
+            --hard-black: #1a1a1a;
+            --border-thick: 3px solid #000;
+            --shadow-hard: 6px 6px 0px 0px #000;
+            --shadow-hover: 2px 2px 0px 0px #000;
+        }
+
         body {
-            font-family: 'VT323', monospace;
+            font-family: 'Space Mono', monospace;
+            background-color: var(--accent-yellow);
+            background-image: radial-gradient(#000 10%, transparent 10%);
+            background-size: 20px 20px;
+            color: black;
             overflow-x: hidden;
-            background-color: #111827; /* bg-gray-900 equivalent for overscroll area */
-            /* Prevent text selection on rapid taps */
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            /* Prevent double-tap zoom delay */
-            touch-action: manipulation;
-        }
-        
-        /* Custom Scrollbar for Log */
-        #log-panel::-webkit-scrollbar {
-            width: 8px;
-        }
-        #log-panel::-webkit-scrollbar-track {
-            background: #000; 
-        }
-        #log-panel::-webkit-scrollbar-thumb {
-            background: #374151; 
-            border: 1px solid #000;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .pixel-corners {
-            image-rendering: pixelated;
-            border-style: solid;
-            border-width: 4px;
-            border-image-slice: 2;
-            border-image-width: 2;
-            border-image-repeat: stretch;
-            border-image-source: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8" ?><svg version="1.1" width="5" height="5" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 h1 v1 h-1 z M1 2 h1 v1 h-1 z M3 2 h1 v1 h-1 z M2 3 h1 v1 h-1 z" fill="black" /></svg>');
-            border-image-outset: 2;
+        h1, h2, h3, .display-font {
+            font-family: 'Lexend Mega', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
         }
-        .btn-pixel {
-             background: #d3d3d3;
-             color: black;
-             position: relative;
-             padding: 8px 16px;
-             transition: transform 0.05s;
+
+        /* --- COMPONENTS --- */
+        .neo-box {
+            background: white;
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            transition: all 0.1s ease;
         }
-        .btn-pixel:hover {
-            background: #a9a9a9;
+
+        /* Container Tilt on Desktop */
+        @media (min-width: 768px) {
+            .tilt-container {
+                transform: rotate(-1deg);
+            }
         }
-        .btn-pixel:active {
-            background: #808080;
-            transform: translateY(2px);
+
+        /* Buttons */
+        .btn-neo {
+            font-family: 'Lexend Mega', sans-serif;
+            font-size: 0.8rem;
+            border: var(--border-thick);
+            box-shadow: var(--shadow-hard);
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 12px 16px;
+            transition: all 0.1s cubic-bezier(0, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: white; /* Default */
         }
-        .btn-pixel:disabled {
-            background: #555;
-            color: #888;
+        .btn-neo:hover:not(:disabled) {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px 0px #000;
+            background-color: var(--accent-cyan);
+        }
+        .btn-neo:active:not(:disabled) {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px 0px #000;
+        }
+        .btn-neo:disabled {
+            background-color: #d1d5db;
+            color: #9ca3af;
+            box-shadow: none;
             cursor: not-allowed;
-            transform: none;
+            border-color: #9ca3af;
         }
 
-        /* Toast Animation */
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
+        /* Colors for Buttons */
+        .bg-lime { background-color: var(--accent-lime) !important; }
+        .bg-pink { background-color: var(--accent-pink) !important; }
+        .bg-cyan { background-color: var(--accent-cyan) !important; }
+        .bg-white { background-color: #fff !important; }
+        .bg-red { background-color: #ff4d4d !important; color: white; }
+
+        /* Market Items */
+        .market-item {
+            border-bottom: 3px solid black;
+            transition: background 0.2s;
         }
-        .toast {
-            animation: fadeOut 3s forwards;
+        .market-item:last-child { border-bottom: none; }
+        .market-item:hover { background-color: #fefce8; }
+
+        /* Status Badges */
+        .stat-badge {
+            background: black;
+            color: white;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border: 2px solid transparent;
+        }
+        .stat-badge.highlight {
+            background: var(--accent-lime);
+            color: black;
+            border: 2px solid black;
         }
 
-        /* --- VISUAL JUICE --- */
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-40px) scale(1.2); opacity: 0; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: white; border-left: 3px solid black; }
+        ::-webkit-scrollbar-thumb { background: var(--accent-pink); border: 3px solid black; }
+        ::-webkit-scrollbar-thumb:hover { background: black; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes floatText {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-60px) scale(1.5) rotate(10deg); opacity: 0; }
         }
         .floating-text {
             position: fixed;
             pointer-events: none;
-            animation: floatUp 0.8s ease-out forwards;
-            font-weight: bold;
-            font-size: 2rem;
-            text-shadow: 2px 2px 0px #000;
+            animation: floatText 0.6s ease-out forwards;
+            font-family: 'Lexend Mega', sans-serif;
+            font-weight: 900;
+            text-shadow: 3px 3px 0px #000;
             z-index: 100;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        .shake-effect {
-            animation: shake 0.3s ease-in-out;
+            -webkit-text-stroke: 1px black;
         }
 
-        @keyframes flashRed {
-            0%, 100% { box-shadow: inset 0 0 0 0 transparent; }
-            50% { box-shadow: inset 0 0 50px 20px rgba(220, 38, 38, 0.5); }
+        @keyframes violentShake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .shake-effect { animation: violentShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+
+        @keyframes flashScreen {
+            0%, 100% { background-color: transparent; }
+            50% { background-color: rgba(255, 0, 0, 0.6); }
         }
         .flash-effect {
-            animation: flashRed 0.5s ease-in-out;
-            pointer-events: none;
-            position: fixed;
-            inset: 0;
-            z-index: 90;
+            animation: flashScreen 0.2s ease-in-out 2; 
+            position: fixed; inset: 0; z-index: 90; pointer-events: none;
+        }
+
+        /* Toast */
+        .toast {
+            border: 3px solid black;
+            box-shadow: 8px 8px 0px 0px #000;
+            font-weight: bold;
+            animation: slideDown 0.3s ease-out, fadeOut 0.5s ease-in 2.5s forwards;
+            font-family: 'Lexend Mega', sans-serif;
+            text-transform: uppercase;
+        }
+        @keyframes slideDown { from { transform: translateY(-100%) translateX(-50%); } to { transform: translateY(0) translateX(-50%); } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px) translateX(-50%); } }
+
+        /* Modal Overlay */
+        .modal-backdrop {
+            background-color: rgba(255, 206, 0, 0.85); /* Yellow overlay */
+            backdrop-filter: grayscale(100%) contrast(120%);
+        }
+
+        /* Progress Bar Stripes */
+        .striped-bar {
+            background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 50%, #000 50%, #000 75%, transparent 75%, transparent);
+            background-size: 20px 20px;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-green-400 p-2 md:p-8 flex items-center justify-center min-h-screen">
+<body class="p-2 md:p-8 flex items-center justify-center min-h-screen select-none">
 
-    <!-- Game Mode Selection Modal (Visible at start) -->
-    <div id="game-mode-modal" class="w-full max-w-lg bg-gray-800 p-6 md:p-8 pixel-corners border-amber-400 text-center">
-        <h1 class="text-5xl font-bold tracking-widest text-white">Hustle SG</h1>
-        <p class="text-gray-400 text-lg mb-8">by Ath Thaariq Marthas</p>
-        <h2 class="text-3xl text-amber-400 mb-6">Choose Your Hustle</h2>
+    <!-- MAIN MENU / START SCREEN -->
+    <div id="game-mode-modal" class="w-full max-w-lg bg-white border-[4px] border-black shadow-[12px_12px_0px_0px_#000] p-8 text-center relative overflow-hidden">
+        <!-- Decorative BG element -->
+        <div class="absolute top-0 left-0 w-full h-4 bg-black"></div>
+        <div class="absolute bottom-0 right-0 w-full h-4 bg-black"></div>
         
-        <!-- Continue Button (Hidden by default) -->
-        <button id="continue-game-button" class="w-full btn-pixel pixel-corners border-cyan-500 p-4 mb-4 hidden">
-            <h3 class="text-2xl">Continue Game</h3>
-            <p id="continue-details" class="text-sm text-black">Day 5 - Cash: $5,000</p>
-        </button>
+        <h1 class="text-6xl md:text-7xl font-black mb-2 tracking-tighter italic">HUSTLE<br><span class="text-[#ff90e8]">SG</span></h1>
+        <div class="inline-block bg-black text-white px-2 py-1 font-mono text-sm mb-8 rotate-2">Est. 2025 // Singapore</div>
 
-        <div class="space-y-4">
-            <button id="blitz-mode-button" class="w-full btn-pixel pixel-corners border-green-500 p-4">
-                <h3 class="text-2xl">Blitz Mode</h3>
-                <p class="text-sm text-black">A high-stakes, 30-day challenge. Go for the high score.</p>
+        <div class="space-y-4 relative z-10">
+            <button id="continue-game-button" class="hidden w-full btn-neo bg-lime flex-col py-4">
+                <span class="text-xl">RESUME RUN</span>
+                <span id="continue-details" class="font-mono text-xs mt-1 lowercase">day 5 // $5k</span>
             </button>
-            <button id="career-mode-button" class="w-full btn-pixel pixel-corners border-purple-500 p-4">
-                 <h3 class="text-2xl">Career Mode</h3>
-                <p class="text-sm text-black">Build your empire with no time limit. Achieve total control.</p>
+
+            <button id="blitz-mode-button" class="w-full btn-neo bg-white flex-col py-6 hover:bg-cyan group">
+                <span class="text-2xl group-hover:tracking-widest transition-all">BLITZ MODE</span>
+                <span class="font-mono text-xs mt-2 text-gray-600 group-hover:text-black">30 Days. High Score. Chaos.</span>
+            </button>
+
+            <button id="career-mode-button" class="w-full btn-neo bg-white flex-col py-6 hover:bg-pink group">
+                <span class="text-2xl group-hover:tracking-widest transition-all">CAREER MODE</span>
+                <span class="font-mono text-xs mt-2 text-gray-600 group-hover:text-black">Unlimited Time. Total Domination.</span>
             </button>
         </div>
+        <p class="mt-8 font-mono text-xs text-gray-400">Constructed by Ath Thaariq Marthas</p>
     </div>
 
-    <!-- Flash Overlay -->
+    <!-- FLASH OVERLAY -->
     <div id="flash-overlay"></div>
 
-    <div id="game-container" class="hidden max-w-4xl mx-auto w-full transition-transform pb-20 md:pb-0">
-        <!-- Header -->
-        <header class="flex justify-between items-start mb-4 md:mb-6">
-            <div class="text-left">
-                <h1 class="text-4xl md:text-6xl font-bold tracking-widest text-white">Hustle SG</h1>
-                <p id="game-mode-tagline" class="text-green-500 mt-1 text-xs md:text-base">30 days to make your fortune.</p>
+    <!-- GAME UI CONTAINER -->
+    <div id="game-container" class="hidden max-w-5xl w-full tilt-container transition-all duration-300 pb-20 md:pb-0">
+        
+        <!-- HEADER AREA -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
+            <div class="bg-white border-[3px] border-black p-4 shadow-[6px_6px_0px_0px_#000] w-full md:w-auto">
+                <h1 class="text-4xl md:text-5xl font-black leading-none">HUSTLE <span class="text-[#ff90e8]">SG</span></h1>
+                <div class="bg-black text-white text-xs font-mono px-2 py-1 mt-2 inline-block">
+                    <span id="game-mode-tagline">Build your empire.</span>
+                </div>
             </div>
-            <button id="system-menu-button" class="btn-pixel pixel-corners border-gray-400 text-sm h-10 px-4">
-                💾 SYSTEM
-            </button>
+            <div class="flex gap-2 w-full md:w-auto">
+                <button id="system-menu-button" class="btn-neo bg-white flex-1 md:flex-none">
+                    💾 SYSTEM
+                </button>
+            </div>
         </header>
 
-        <!-- Status Panel -->
-        <div id="status-panel" class="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-4 mb-4 p-2 md:p-4 bg-gray-800 pixel-corners border-green-500 text-center md:text-left">
-            <div>
-                <h2 class="text-[10px] md:text-sm text-gray-400">CASH</h2>
-                <p id="player-cash" class="text-lg md:text-2xl text-white">$2,000</p>
+        <!-- STATS BAR (Glitchy Layout) -->
+        <div id="status-panel" class="flex flex-wrap gap-3 mb-6">
+            <!-- Cash -->
+            <div class="bg-black text-white border-[3px] border-black shadow-[4px_4px_0px_0px_#fff] p-3 flex-grow min-w-[120px]">
+                <div class="text-[#b8ff01] text-xs font-bold uppercase">CASH</div>
+                <div id="player-cash" class="text-2xl font-mono tracking-tighter">$2,000</div>
             </div>
-             <div>
-                <h2 class="text-[10px] md:text-sm text-gray-400">DEBT</h2>
-                <p id="player-debt" class="text-lg md:text-2xl text-red-500">$0</p>
+            <!-- Debt -->
+            <div class="bg-white border-[3px] border-black shadow-[4px_4px_0px_0px_#000] p-3 flex-grow min-w-[120px]">
+                <div class="text-red-600 text-xs font-bold uppercase">DEBT</div>
+                <div id="player-debt" class="text-2xl font-mono tracking-tighter text-red-600">$0</div>
             </div>
-             <div>
-                <h2 class="text-[10px] md:text-sm text-gray-400">REP</h2>
-                <p id="player-rep" class="text-lg md:text-2xl text-white">0</p>
+            <!-- Rep -->
+            <div class="bg-[#b8ff01] border-[3px] border-black shadow-[4px_4px_0px_0px_#000] p-3 flex-grow min-w-[80px]">
+                <div class="text-black text-xs font-bold uppercase">REP</div>
+                <div id="player-rep" class="text-2xl font-mono font-bold">0</div>
             </div>
-             <div>
-                <h2 class="text-[10px] md:text-sm text-gray-400">BAG</h2>
-                <p id="player-inventory-status" class="text-lg md:text-2xl text-white">0 / 20</p>
+             <!-- Bag -->
+             <div class="bg-[#ff90e8] border-[3px] border-black shadow-[4px_4px_0px_0px_#000] p-3 flex-grow min-w-[80px]">
+                <div class="text-black text-xs font-bold uppercase">BAG</div>
+                <div id="player-inventory-status" class="text-2xl font-mono font-bold">0/20</div>
             </div>
-            <div>
-                <h2 class="text-[10px] md:text-sm text-gray-400">LOC</h2>
-                <p id="player-location" class="text-lg md:text-2xl text-white">Geylang</p>
+            <!-- Loc -->
+            <div class="bg-white border-[3px] border-black shadow-[4px_4px_0px_0px_#000] p-3 flex-grow min-w-[120px]">
+                <div class="text-gray-500 text-xs font-bold uppercase">LOC</div>
+                <div id="player-location" class="text-xl font-bold uppercase truncate">Geylang</div>
             </div>
-            <div>
-                <h2 class="text-[10px] md:text-sm text-gray-400">DAY</h2>
-                <p id="days-left" class="text-lg md:text-2xl text-white">1 / 30</p>
+            <!-- Day -->
+            <div class="bg-black text-white border-[3px] border-black shadow-[4px_4px_0px_0px_#fff] p-3 flex-grow min-w-[80px]">
+                <div class="text-gray-400 text-xs font-bold uppercase">DAY</div>
+                <div id="days-left" class="text-xl font-mono">1/30</div>
             </div>
         </div>
 
-        <!-- Main Content: Market & Inventory -->
-        <main id="main-content" class="p-2 md:p-4 bg-gray-800 pixel-corners border-green-500">
-            <div class="flex justify-between items-center border-b-2 border-green-500 pb-2 mb-4">
-                 <div class="flex items-center gap-3">
-                     <h2 class="text-xl md:text-2xl text-white">Local Market</h2>
-                     <!-- GEMINI API BUTTON -->
-                     <button id="analyze-market-btn" class="btn-pixel border-amber-400 text-amber-400 text-xs px-2 py-1 flex items-center gap-1" title="Get tips from the streets">
-                        <span>✨</span> Analyze ($50)
-                     </button>
-                 </div>
-                 <div id="turf-control-status" class="text-right">
-                     <p class="text-[10px] md:text-sm text-gray-400">Control</p>
-                     <p id="turf-control-level" class="text-lg md:text-xl text-purple-400">0%</p>
-                 </div>
-            </div>
-           
-            <div id="market-list" class="space-y-3">
-                <!-- Market items will be injected here by JavaScript -->
-            </div>
+        <!-- MAIN ACTION AREA -->
+        <div class="flex flex-col lg:flex-row gap-6">
             
-            <!-- Action Buttons Grid -->
-            <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
-                 <button id="travel-button" class="btn-pixel pixel-corners border-green-500 text-lg py-4 md:py-2">Travel</button>
-                 <button id="turf-button" class="btn-pixel pixel-corners border-purple-500 text-lg py-4 md:py-2">Turf</button>
-                 <button id="finance-button" class="btn-pixel pixel-corners border-red-500 text-lg py-4 md:py-2">Finance</button>
-                 <button id="upgrades-button" class="btn-pixel pixel-corners border-blue-500 text-lg py-4 md:py-2">Upgrades</button>
-            </div>
-        </main>
-        
-        <!-- Game Log -->
-        <div id="log-panel" class="mt-4 p-3 bg-black pixel-corners border-gray-700 h-32 overflow-y-auto font-mono text-sm md:text-base leading-tight">
-            <p id="log-message" class="text-gray-400">> Welcome to the hustle. Make your first move.</p>
+            <!-- MARKET COLUMN -->
+            <main id="main-content" class="flex-grow bg-white border-[3px] border-black shadow-[8px_8px_0px_0px_#000] relative">
+                <!-- Decorative header stripe -->
+                <div class="bg-[#23f0c7] border-b-[3px] border-black p-3 flex justify-between items-center sticky top-0 z-10">
+                     <div class="flex items-center gap-3">
+                         <h2 class="text-xl font-black">LOCAL MARKET</h2>
+                         <button id="analyze-market-btn" class="btn-neo bg-white text-xs px-2 py-1 border-2 shadow-none hover:shadow-none h-8" title="Ask the streets">
+                            <span>👀</span> INTEL ($50)
+                         </button>
+                     </div>
+                     <div class="text-right">
+                         <p class="text-[10px] font-bold uppercase">Turf Control</p>
+                         <p id="turf-control-level" class="text-xl font-black leading-none">0%</p>
+                     </div>
+                </div>
+               
+                <!-- Scrollable List -->
+                <div id="market-list" class="max-h-[500px] overflow-y-auto bg-white">
+                    <!-- Items injected here -->
+                </div>
+            </main>
+
+            <!-- SIDEBAR / ACTIONS -->
+            <aside class="w-full lg:w-1/3 flex flex-col gap-4">
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                     <button id="travel-button" class="btn-neo bg-[#b8ff01] py-4 text-lg">GO</button>
+                     <button id="turf-button" class="btn-neo bg-[#ff90e8] py-4 text-lg">TURF</button>
+                     <button id="finance-button" class="btn-neo bg-[#ff4d4d] text-white py-4 text-lg">LOAN</button>
+                     <button id="upgrades-button" class="btn-neo bg-[#23f0c7] py-4 text-lg">GEAR</button>
+                </div>
+
+                <!-- Log Panel -->
+                <div class="bg-black border-[3px] border-black shadow-[8px_8px_0px_0px_#fff] flex-grow min-h-[200px] p-4 flex flex-col">
+                    <div class="text-gray-500 text-xs font-mono mb-2 border-b border-gray-800 pb-1">SYSTEM LOG //</div>
+                    <div id="log-panel" class="overflow-y-auto flex-grow h-40 font-mono text-sm text-green-400 leading-snug space-y-1">
+                        <p id="log-message" class="animate-pulse">> Welcome to the hustle. Make moves.</p>
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-xs text-center"></div>
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="fixed top-8 left-1/2 transform -translate-x-1/2 z-[100] w-full max-w-xs text-center space-y-2"></div>
     
-    <!-- Modals -->
+    <!-- MODALS (OVERLAYS) -->
+    
+    <!-- Generic Modal Backdrop Structure -->
+    <div id="modal-backdrop" class="hidden fixed inset-0 bg-yellow-400 bg-opacity-90 backdrop-blur-sm z-40"></div>
 
     <!-- System Modal -->
-    <div id="system-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-50">
-        <div class="w-full max-w-sm bg-gray-800 p-6 pixel-corners border-gray-400 text-center">
-            <h2 class="text-3xl text-white mb-6">System Menu</h2>
+    <div id="system-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="w-full max-w-sm bg-white border-[4px] border-black shadow-[12px_12px_0px_0px_#b8ff01] p-6 text-center">
+            <h2 class="text-4xl font-black mb-6 italic">SYSTEM</h2>
             <div class="space-y-3">
-                <button id="manual-save-button" class="w-full btn-pixel pixel-corners border-green-500 py-3">Manual Save</button>
-                <button id="reset-run-button" class="w-full btn-pixel pixel-corners border-red-500 py-3">Forfeit Run (Reset)</button>
-                <button id="wipe-save-button" class="w-full btn-pixel pixel-corners border-gray-500 py-3">Delete Save Data</button>
-                <hr class="border-gray-600 my-4">
-                <button id="system-close-button" class="w-full btn-pixel pixel-corners border-gray-400 py-3">Resume Game</button>
+                <button id="manual-save-button" class="w-full btn-neo bg-white py-3">SAVE GAME</button>
+                <button id="reset-run-button" class="w-full btn-neo bg-white border-red-500 text-red-500 py-3">FORFEIT RUN</button>
+                <button id="wipe-save-button" class="w-full btn-neo bg-black text-white py-3">WIPE DATA</button>
+                <hr class="border-black border-t-2 my-4">
+                <button id="system-close-button" class="w-full btn-neo bg-gray-200 py-3">RESUME</button>
             </div>
         </div>
     </div>
 
-    <!-- Ah Long (Finance) Modal -->
-    <div id="finance-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-40">
-        <div class="w-full max-w-md bg-gray-800 p-4 md:p-6 pixel-corners border-red-600">
-            <h2 class="text-3xl text-red-500 mb-2">The Ah Long</h2>
-            <p class="mb-4 text-xs md:text-sm text-gray-300">"Need cash fast? I help you. But remember, my interest is 10% every single day. Don't make me come find you."</p>
+    <!-- Finance Modal -->
+    <div id="finance-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-red-900/90">
+        <div class="w-full max-w-md bg-white border-[4px] border-black shadow-[12px_12px_0px_0px_#000] p-6">
+            <h2 class="text-4xl font-black mb-2 text-red-600 uppercase italic">THE AH LONG</h2>
+            <p class="mb-4 text-xs font-mono bg-black text-white p-2">"10% Interest daily. Don't make me find you."</p>
             
-            <div class="bg-black p-4 mb-4 border border-red-900">
+            <div class="bg-gray-100 border-2 border-black p-4 mb-4 font-mono">
                 <div class="flex justify-between mb-2">
-                    <span class="text-gray-400 text-sm">Current Debt:</span>
-                    <span id="finance-current-debt" class="text-red-500 font-bold">$0</span>
-                </div>
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-400 text-sm">Credit Limit:</span>
-                    <span id="finance-credit-limit" class="text-green-400">$0</span>
+                    <span>OWING:</span>
+                    <span id="finance-current-debt" class="text-red-600 font-bold">$0</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-400 text-sm">Daily Interest:</span>
-                    <span class="text-red-400">10%</span>
+                    <span>LIMIT:</span>
+                    <span id="finance-credit-limit" class="text-green-600 font-bold">$0</span>
                 </div>
             </div>
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-white mb-1 text-sm">Borrow Cash</label>
+                    <label class="block font-bold mb-1 text-sm">BORROW</label>
                     <div class="flex gap-2">
-                        <input type="number" id="borrow-amount" class="w-full p-2 bg-black text-green-400 pixel-corners border-green-500 focus:outline-none" placeholder="Amount...">
-                        <button id="borrow-confirm-button" class="btn-pixel pixel-corners border-green-500 px-4">Get</button>
+                        <input type="number" id="borrow-amount" class="w-full p-2 border-[3px] border-black font-mono focus:outline-none focus:bg-yellow-100" placeholder="Amount...">
+                        <button id="borrow-confirm-button" class="btn-neo bg-[#b8ff01]">GET</button>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-white mb-1 text-sm">Repay Debt</label>
+                    <label class="block font-bold mb-1 text-sm">REPAY</label>
                     <div class="flex gap-2">
-                        <input type="number" id="repay-amount" class="w-full p-2 bg-black text-green-400 pixel-corners border-blue-500 focus:outline-none" placeholder="Amount...">
-                        <button id="repay-confirm-button" class="btn-pixel pixel-corners border-blue-500 px-4">Pay</button>
+                        <input type="number" id="repay-amount" class="w-full p-2 border-[3px] border-black font-mono focus:outline-none focus:bg-blue-100" placeholder="Amount...">
+                        <button id="repay-confirm-button" class="btn-neo bg-[#23f0c7]">PAY</button>
                     </div>
                 </div>
             </div>
-            <button id="finance-close-button" class="w-full mt-6 btn-pixel pixel-corners border-gray-500 py-3">Leave</button>
+            <button id="finance-close-button" class="w-full mt-6 btn-neo bg-gray-200 py-3">EXIT</button>
         </div>
     </div>
 
-    <!-- Lieutenant Modal -->
-    <div id="lieutenant-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-40">
-        <div class="w-full max-w-md bg-gray-800 p-6 pixel-corners border-cyan-400">
-            <h2 class="text-3xl text-white mb-2">Recruit Lieutenant</h2>
-            <p class="mb-4 text-sm">Hire a loyal crew member to manage this turf for you.</p>
-            <div id="lieutenant-info" class="mb-6 bg-black p-4">
-                <h3 id="lieutenant-name" class="text-2xl text-cyan-300"></h3>
-                <p id="lieutenant-description" class="text-xs text-gray-400 mb-2"></p>
-                <p><strong>Benefit:</strong> <span id="lieutenant-benefit"></span></p>
-                <p><strong>Daily Salary:</strong> <span id="lieutenant-salary" class="text-red-400"></span></p>
-                <p class="mt-2"><strong>Hire Cost:</strong> <span id="lieutenant-cost" class="text-yellow-400"></span></p>
-            </div>
-            <div class="flex justify-between gap-4">
-                <button id="lieutenant-confirm-button" class="flex-1 btn-pixel pixel-corners border-green-500 py-3">Hire</button>
-                <button id="lieutenant-cancel-button" class="flex-1 btn-pixel pixel-corners border-gray-500 py-3">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Turf Modal -->
-    <div id="turf-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-40">
-        <div class="w-full max-w-md bg-gray-800 p-4 md:p-6 pixel-corners border-purple-500">
-            <h2 class="text-3xl text-white mb-2">Manage Turf</h2>
-            <p class="mb-4 text-xs md:text-sm text-gray-400">Invest to dominate this district.</p>
+    <!-- Transaction Modal -->
+    <div id="transaction-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-md bg-white border-[4px] border-black shadow-[12px_12px_0px_0px_#23f0c7] p-6 relative">
+            <div class="absolute -top-4 -right-4 bg-[#23f0c7] border-[3px] border-black p-2 font-bold transform rotate-3 z-10">DEAL</div>
             
-            <!-- Turf War Visual -->
-            <div class="mb-4 bg-black p-4">
-                <div class="flex justify-between text-[10px] md:text-xs mb-1">
-                    <span class="text-purple-400">YOU</span>
-                    <span id="rival-name" class="text-red-400">RIVAL</span>
-                </div>
-                <div class="w-full bg-red-900 h-6 pixel-corners border-gray-700">
-                    <div id="turf-control-bar" class="bg-purple-600 h-full transition-all duration-500"></div>
-                </div>
-                 <div class="flex justify-between text-lg mt-1">
-                    <strong id="turf-modal-player-level" class="text-purple-400">0%</strong>
-                    <strong id="turf-modal-rival-level" class="text-red-400">0%</strong>
-                </div>
-            </div>
+            <h2 id="modal-title" class="text-3xl font-black mb-4 uppercase">BUY WEED</h2>
             
-            <!-- Strategic Perk Info -->
-            <div id="turf-perk-section" class="mb-4 p-3 border border-yellow-600 bg-yellow-900 bg-opacity-20 hidden">
-                <h3 class="text-yellow-400 text-xs font-bold">STRATEGIC BONUS (100% Control)</h3>
-                <p id="turf-perk-name" class="text-white text-lg">Perk Name</p>
-                <p id="turf-perk-desc" class="text-gray-300 text-xs">Perk Description</p>
-                <p id="turf-perk-status" class="text-red-400 text-xs mt-1 font-bold">LOCKED</p>
+            <div class="mb-4 space-y-2 font-mono text-sm bg-gray-50 p-3 border-2 border-gray-200">
+                <p class="flex justify-between"><span>UNIT PRICE:</span> <span id="modal-item-price" class="font-bold"></span></p>
+                <p class="flex justify-between"><span>IN BAG:</span> <span id="modal-item-inventory"></span></p>
+                <p class="flex justify-between"><span>SPACE:</span> <span id="modal-space-left"></span></p>
             </div>
 
-            <div id="turf-investment-section">
-                <div class="mb-4">
-                     <label for="invest-amount" class="block text-white mb-2 text-sm">Investment Amount:</label>
-                     <div class="flex gap-2">
-                         <input type="number" id="invest-amount" min="1" class="w-full p-2 bg-black text-green-400 pixel-corners border-green-500 focus:outline-none" placeholder="Amount...">
-                         <button id="turf-confirm-button" class="btn-pixel pixel-corners border-green-500 px-4">Invest</button>
-                     </div>
-                </div>
-            </div>
-            <!-- Lieutenant Section -->
-            <div id="turf-lieutenant-section" class="mt-4 pt-4 border-t-2 border-purple-800">
-                <h3 class="text-lg text-cyan-400 text-center mb-2">Operations</h3>
-                <div id="lieutenant-status" class="text-center">
-                    <!-- Status or Recruit button appears here -->
-                </div>
-            </div>
-             <button id="turf-cancel-button" class="w-full mt-6 btn-pixel pixel-corners border-gray-500 py-3">Close</button>
-        </div>
-    </div>
-
-
-     <!-- Upgrade Modal -->
-    <div id="upgrade-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-40">
-        <div class="w-full max-w-md bg-gray-800 p-6 pixel-corners border-blue-500">
-            <h2 class="text-3xl text-white mb-2">Upgrades</h2>
-            <p class="mb-4 text-sm">Invest in your operation.</p>
-            <div id="upgrade-info" class="mb-6 bg-black p-4">
-                <h3 id="upgrade-name" class="text-2xl text-blue-300"></h3>
-                <p>New Capacity: <strong id="upgrade-capacity"></strong></p>
-                <p class="mt-2">Cost: <strong id="upgrade-cost" class="text-yellow-400"></strong></p>
-            </div>
-             <p id="max-upgrade-message" class="hidden text-center text-xl text-blue-300">You have the best gear available.</p>
-            <div class="flex justify-between gap-4">
-                <button id="upgrade-confirm-button" class="flex-1 btn-pixel pixel-corners border-green-500 py-3">Purchase</button>
-                <button id="upgrade-cancel-button" class="flex-1 btn-pixel pixel-corners border-gray-500 py-3">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Danger Modal -->
-    <div id="danger-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 text-center z-50">
-        <div class="w-full max-w-md bg-gray-800 p-8 pixel-corners border-red-500">
-            <h2 id="danger-title" class="text-4xl text-red-500 mb-4">DANGER!</h2>
-            <p id="danger-headline" class="text-white text-xl mb-8">Something bad happened!</p>
-            <button id="danger-close-button" class="w-full btn-pixel pixel-corners border-green-500 text-2xl py-3">Continue</button>
-        </div>
-    </div>
-
-    <!-- Event Modal (Reused for Intel) -->
-    <div id="event-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 text-center z-50">
-        <div class="w-full max-w-md bg-gray-800 p-8 pixel-corners border-amber-400">
-            <h2 id="event-title" class="text-4xl text-amber-400 mb-4">Daily News</h2>
-            <p id="event-headline" class="text-white text-xl mb-8">Something happened!</p>
-            <button id="event-close-button" class="w-full btn-pixel pixel-corners border-green-500 text-2xl py-3">Continue</button>
-        </div>
-    </div>
-
-    <!-- Buy/Sell Modal -->
-    <div id="transaction-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-40">
-        <div class="w-full max-w-md bg-gray-800 p-6 pixel-corners border-green-500">
-            <h2 id="modal-title" class="text-3xl text-white mb-4">Transaction</h2>
-            <div class="mb-4 space-y-2 text-sm md:text-base">
-                <p class="flex justify-between"><span>Price:</span> <span id="modal-item-price" class="text-green-400"></span></p>
-                <p class="flex justify-between"><span>Owned:</span> <span id="modal-item-inventory"></span></p>
-                <p class="flex justify-between"><span>Space:</span> <span id="modal-space-left"></span></p>
-            </div>
             <div class="mb-6">
-                <label for="quantity" class="block text-white mb-2 text-sm">Quantity:</label>
+                <label for="quantity" class="block font-bold mb-2 text-sm">QUANTITY</label>
                 <div class="flex gap-2 mb-2">
-                    <input type="number" id="quantity" min="1" class="w-full p-2 bg-black text-green-400 pixel-corners border-green-500 focus:outline-none" placeholder="Amount">
+                    <input type="number" id="quantity" min="1" class="w-full p-3 border-[3px] border-black font-mono text-xl focus:outline-none focus:shadow-[4px_4px_0px_0px_#000]" placeholder="0">
                 </div>
                 <div class="flex gap-2">
-                    <button id="buy-max-button" class="flex-1 btn-pixel pixel-corners border-blue-500 text-sm py-2">Max</button>
-                    <button id="sell-all-button" class="flex-1 btn-pixel pixel-corners border-yellow-500 text-sm py-2">All</button>
+                    <button id="buy-max-button" class="flex-1 btn-neo bg-blue-200 text-xs py-2">MAX</button>
+                    <button id="sell-all-button" class="flex-1 btn-neo bg-yellow-200 text-xs py-2">ALL</button>
                 </div>
             </div>
+
             <div class="flex justify-between gap-4">
-                <button id="modal-confirm-button" class="flex-1 btn-pixel pixel-corners border-green-500 py-3">Confirm</button>
-                <button id="modal-cancel-button" class="flex-1 btn-pixel pixel-corners border-gray-500 py-3">Cancel</button>
+                <button id="modal-confirm-button" class="flex-1 btn-neo bg-[#b8ff01] py-3 text-lg">CONFIRM</button>
+                <button id="modal-cancel-button" class="flex-1 btn-neo bg-white py-3 text-lg">CANCEL</button>
             </div>
         </div>
     </div>
 
-    <!-- Travel Modal -->
-    <div id="travel-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-40">
-        <div class="w-full max-w-md bg-gray-800 p-6 pixel-corners border-green-500">
-            <h2 class="text-3xl text-white mb-4">Travel</h2>
-            <p class="mb-6 text-sm text-gray-400">Select a district. Time will pass.</p>
-            <div id="travel-options" class="grid grid-cols-1 gap-3">
-                <!-- Travel buttons will be injected here -->
-            </div>
-             <button id="travel-cancel-button" class="w-full mt-6 btn-pixel pixel-corners border-gray-500 py-3">Stay Put</button>
-        </div>
-    </div>
+    <!-- Generic Content Modals (Travel, Turf, Upgrades, Danger, Event, Lieutenant) -->
+    <!-- Reusing a generic container logic for brevity in HTML but kept IDs for JS -->
     
-    <!-- Game Over Modal -->
-    <div id="game-over-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 text-center z-50">
-        <div class="w-full max-w-md bg-gray-800 p-8 pixel-corners border-red-500">
-            <h2 id="game-over-title" class="text-6xl text-red-500 mb-4">GAME OVER</h2>
-            <p id="game-over-subtitle" class="text-white text-xl mb-2">The 30 days are up.</p>
-            <p id="game-over-reason" class="text-white text-lg mb-6"></p>
-            <p class="text-white text-xl mb-6">You finished with:</p>
-            <p id="final-cash" class="text-4xl text-green-400 mb-8">$0</p>
-            <button id="restart-button" class="w-full btn-pixel pixel-corners border-green-500 text-2xl py-4">Play Again</button>
+    <!-- TRAVEL -->
+    <div id="travel-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-blue-900/90">
+        <div class="w-full max-w-md bg-white border-[4px] border-black shadow-[12px_12px_0px_0px_#fff] p-6">
+            <h2 class="text-3xl font-black mb-4">DESTINATION</h2>
+            <p class="mb-6 text-sm font-mono">Select a district. Time passes.</p>
+            <div id="travel-options" class="grid grid-cols-1 gap-3"></div>
+            <button id="travel-cancel-button" class="w-full mt-6 btn-neo bg-gray-200 py-3">STAY HERE</button>
         </div>
     </div>
 
+    <!-- TURF -->
+    <div id="turf-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-purple-900/90">
+        <div class="w-full max-w-md bg-white border-[4px] border-black shadow-[12px_12px_0px_0px_#ff90e8] p-6">
+            <h2 class="text-3xl font-black mb-2">TURF WAR</h2>
+            
+            <div class="mb-4 border-[3px] border-black p-3 bg-gray-100">
+                <div class="flex justify-between text-xs font-bold mb-1">
+                    <span class="text-purple-600">YOU</span>
+                    <span id="rival-name" class="text-red-600">RIVAL</span>
+                </div>
+                <div class="w-full bg-red-500 h-6 border-2 border-black relative overflow-hidden">
+                    <div id="turf-control-bar" class="bg-purple-500 h-full transition-all duration-500 absolute left-0 top-0 striped-bar"></div>
+                </div>
+                <div class="flex justify-between text-xl mt-1 font-mono">
+                    <strong id="turf-modal-player-level">0%</strong>
+                    <strong id="turf-modal-rival-level">0%</strong>
+                </div>
+            </div>
+
+            <div id="turf-perk-section" class="mb-4 p-3 border-[3px] border-black hidden">
+                <h3 class="font-bold text-xs uppercase bg-black text-white inline-block px-1">BONUS (100%)</h3>
+                <p id="turf-perk-name" class="font-black text-lg mt-1">Perk Name</p>
+                <p id="turf-perk-desc" class="text-xs font-mono">Perk Description</p>
+                <p id="turf-perk-status" class="text-xs mt-2 font-bold border-t-2 border-black pt-1">LOCKED</p>
+            </div>
+
+            <div>
+                <label class="block font-bold mb-2 text-sm">INVEST CASH</label>
+                <div class="flex gap-2">
+                    <input type="number" id="invest-amount" min="1" class="w-full p-2 border-[3px] border-black font-mono" placeholder="Amount...">
+                    <button id="turf-confirm-button" class="btn-neo bg-[#ff90e8]">PAY</button>
+                </div>
+            </div>
+
+            <div id="turf-lieutenant-section" class="mt-4 pt-4 border-t-[3px] border-black border-dashed">
+                 <h3 class="text-sm font-bold text-center mb-2">LIEUTENANT</h3>
+                 <div id="lieutenant-status" class="text-center"></div>
+            </div>
+            <button id="turf-cancel-button" class="w-full mt-6 btn-neo bg-gray-200 py-3">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- LIEUTENANT -->
+    <div id="lieutenant-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80">
+         <div class="w-full max-w-md bg-white border-[4px] border-black shadow-[12px_12px_0px_0px_#23f0c7] p-6">
+            <h2 class="text-3xl font-black mb-2">RECRUIT</h2>
+            <div id="lieutenant-info" class="mb-6 bg-[#e0e7ff] p-4 border-[3px] border-black">
+                <h3 id="lieutenant-name" class="text-xl font-bold"></h3>
+                <p id="lieutenant-description" class="text-xs font-mono mb-2 mt-1"></p>
+                <div class="space-y-1 text-sm font-bold border-t-2 border-black pt-2 mt-2">
+                     <p>BENEFIT: <span id="lieutenant-benefit"></span></p>
+                     <p>SALARY: <span id="lieutenant-salary" class="text-red-600"></span></p>
+                     <p class="text-lg mt-2 bg-black text-white inline-block px-2">COST: <span id="lieutenant-cost" class="text-[#ffce00]"></span></p>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <button id="lieutenant-confirm-button" class="flex-1 btn-neo bg-[#b8ff01] py-3">HIRE</button>
+                <button id="lieutenant-cancel-button" class="flex-1 btn-neo bg-white py-3">NO</button>
+            </div>
+         </div>
+    </div>
+
+    <!-- UPGRADE -->
+    <div id="upgrade-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-green-900/90">
+        <div class="w-full max-w-md bg-white border-[4px] border-black shadow-[12px_12px_0px_0px_#b8ff01] p-6">
+            <h2 class="text-3xl font-black mb-2">GEAR UP</h2>
+            <div id="upgrade-info" class="mb-6 bg-black text-white p-4 border-[3px] border-white shadow-[4px_4px_0px_0px_#000]">
+                <h3 id="upgrade-name" class="text-2xl font-bold text-[#23f0c7]"></h3>
+                <p class="font-mono mt-2">CAPACITY: <strong id="upgrade-capacity"></strong></p>
+                <p class="font-mono">COST: <strong id="upgrade-cost" class="text-[#ffce00]"></strong></p>
+            </div>
+            <p id="max-upgrade-message" class="hidden text-center text-xl font-bold italic">MAXED OUT.</p>
+            <div class="flex gap-4">
+                <button id="upgrade-confirm-button" class="flex-1 btn-neo bg-[#b8ff01] py-3">BUY</button>
+                <button id="upgrade-cancel-button" class="flex-1 btn-neo bg-white py-3">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DANGER / EVENT -->
+    <div id="danger-modal" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 bg-red-600/90">
+        <div class="w-full max-w-md bg-white border-[4px] border-black shadow-[20px_20px_0px_0px_#000] p-8 text-center transform rotate-1">
+            <h2 id="danger-title" class="text-5xl font-black text-red-600 mb-4 italic">DANGER</h2>
+            <p id="danger-headline" class="text-xl font-bold mb-8 leading-tight">Something bad happened!</p>
+            <button id="danger-close-button" class="w-full btn-neo bg-black text-white py-4 text-2xl">SURVIVE</button>
+        </div>
+    </div>
+
+    <div id="event-modal" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 bg-yellow-400/90">
+        <div class="w-full max-w-md bg-white border-[4px] border-black shadow-[20px_20px_0px_0px_#000] p-8 text-center transform -rotate-1">
+            <h2 id="event-title" class="text-4xl font-black mb-4">NEWS</h2>
+            <p id="event-headline" class="text-xl font-bold mb-8 leading-tight font-mono">Something happened!</p>
+            <button id="event-close-button" class="w-full btn-neo bg-black text-white py-4 text-2xl">OK</button>
+        </div>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="game-over-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black">
+        <div class="w-full max-w-md bg-white border-[6px] border-red-600 p-8 text-center">
+            <h2 id="game-over-title" class="text-6xl font-black text-black mb-2 italic">GAME OVER</h2>
+            <p id="game-over-subtitle" class="text-xl font-mono mb-4">Run Ended.</p>
+            <div class="bg-red-100 p-4 border-2 border-red-600 mb-6">
+                <p id="game-over-reason" class="text-lg font-bold"></p>
+            </div>
+            <p class="text-sm font-bold">FINAL SCORE</p>
+            <p id="final-cash" class="text-5xl font-black text-green-600 mb-8">$0</p>
+            <button id="restart-button" class="w-full btn-neo bg-[#b8ff01] text-2xl py-6 border-4">RESTART</button>
+        </div>
+    </div>
 
     <script>
         // --- GAME CONSTANTS ---
@@ -521,7 +618,7 @@
         const daysLeftEl = document.getElementById('days-left');
         const playerInventoryStatusEl = document.getElementById('player-inventory-status');
         const marketListEl = document.getElementById('market-list');
-        const logMessageEl = document.getElementById('log-message');
+        const logMessageEl = document.getElementById('log-panel'); /* Changed to log-panel to append messages */
         const turfControlLevelEl = document.getElementById('turf-control-level');
         const gameModeTaglineEl = document.getElementById('game-mode-tagline');
         const continueGameButton = document.getElementById('continue-game-button');
@@ -549,10 +646,10 @@
         function saveGame() {
             try {
                 localStorage.setItem(SAVE_KEY, JSON.stringify(gameState));
-                showToast("Game Saved");
+                showToast("GAME SAVED");
             } catch (e) {
                 console.error("Failed to save game", e);
-                showToast("Save Failed!", true);
+                showToast("SAVE FAILED!", true);
             }
         }
 
@@ -573,12 +670,12 @@
                     systemModal.classList.add('hidden');
                     
                     if (gameState.gameMode === 'blitz') {
-                        gameModeTaglineEl.textContent = '30 days to make your fortune. Don\'t get caught.';
+                        gameModeTaglineEl.textContent = '30 DAYS. DONT GET CAUGHT.';
                     } else {
-                        gameModeTaglineEl.textContent = 'Build your empire. Achieve total control.';
+                        gameModeTaglineEl.textContent = 'BUILD YOUR EMPIRE.';
                     }
                     
-                    logMessage("Game loaded successfully.");
+                    logMessage("Game loaded. Resume hustle.");
                     render();
                 }
             } catch (e) {
@@ -589,7 +686,7 @@
 
         function wipeSave() {
             localStorage.removeItem(SAVE_KEY);
-            showToast("Save Data Deleted");
+            showToast("DATA WIPED");
             checkSaveFile(); 
             resetToMainMenu();
         }
@@ -599,16 +696,18 @@
             if (savedData) {
                 const parsed = JSON.parse(savedData);
                 continueGameButton.classList.remove('hidden');
-                continueDetailsEl.textContent = `Day ${parsed.day} - Cash: $${parsed.player.cash.toLocaleString()} - ${parsed.gameMode === 'blitz' ? 'Blitz' : 'Career'}`;
+                continueGameButton.classList.add('flex');
+                continueDetailsEl.textContent = `day ${parsed.day} // $${parsed.player.cash.toLocaleString()} // ${parsed.gameMode}`;
             } else {
                 continueGameButton.classList.add('hidden');
+                continueGameButton.classList.remove('flex');
             }
         }
 
         function showToast(message, isError = false) {
             const toast = document.createElement('div');
-            toast.className = `toast p-3 mb-2 text-white pixel-corners text-sm md:text-base shadow-lg ${isError ? 'bg-red-600' : 'bg-green-600'}`;
-            toast.textContent = message;
+            toast.className = `toast p-4 text-white text-sm shadow-hard border-[3px] border-black ${isError ? 'bg-red-600' : 'bg-black'}`;
+            toast.innerHTML = isError ? `⚠ ${message}` : `> ${message}`;
             toastContainer.appendChild(toast);
             setTimeout(() => {
                 toast.remove();
@@ -647,14 +746,14 @@
         // --- GEMINI API LOGIC ---
         async function askTheStreets() {
             if (gameState.player.cash < 50) {
-                logMessage("Not enough cash for info.", 'error');
-                showToast("Need $50 for intel", true);
+                logMessage("Not enough cash.", 'error');
+                showToast("Need $50", true);
                 return;
             }
 
             const btn = document.getElementById('analyze-market-btn');
             const originalContent = btn.innerHTML;
-            btn.innerHTML = `<span>⏳</span> Listening...`;
+            btn.innerHTML = `...`;
             btn.disabled = true;
 
             const location = gameState.locations.find(l => l.name === gameState.player.currentLocation);
@@ -673,31 +772,31 @@
             Format: "Eh boss, [Advice]."`;
 
             try {
-                // CALL YOUR OWN BACKEND, NOT GOOGLE DIRECTLY
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: prompt })
                 });
                 
-                if (!response.ok) throw new Error('API Error');
+                if (!response.ok) {
+                    throw new Error('API Error');
+                }
 
                 const data = await response.json();
                 const advice = data.candidates[0].content.parts[0].text;
                 
                 gameState.player.cash -= 50;
-                logMessage(`Paid $50 for street intel.`);
-                render(); // update cash
+                logMessage(`Paid $50 for intel.`);
+                render(); 
                 
-                document.getElementById('event-title').textContent = "✨ Street Intel";
-                document.getElementById('event-title').className = "text-4xl text-amber-400 mb-4"; 
+                document.getElementById('event-title').textContent = "STREET INTEL";
                 document.getElementById('event-headline').textContent = advice;
                 eventModal.classList.remove('hidden');
 
             } catch (error) {
                 console.error(error);
-                logMessage("The informant stayed silent.", 'error');
-                showToast("Informant unavailable", true);
+                logMessage("Informant is silent.", 'error');
+                showToast("Intel unavailable", true);
             } finally {
                 btn.innerHTML = originalContent;
                 btn.disabled = false;
@@ -728,7 +827,7 @@
                     cash: INITIAL_CASH, 
                     inventory: initialInventory, 
                     rep: 0,
-                    debt: 0, // New Debt Stat
+                    debt: 0, 
                     currentLocation: 'Geylang',
                     currentUpgradeIndex: 0,
                     inventoryCapacity: UPGRADES[0].capacity,
@@ -754,7 +853,6 @@
             return (location.playerInvestment / totalInvestment);
         }
 
-        // Check if a perk is active globally
         function hasPerk(perkId) {
             const locationBlueprint = LOCATIONS_BLUEPRINT.find(l => l.perkId === perkId);
             if (!locationBlueprint) return false;
@@ -765,7 +863,6 @@
             return getPlayerControlPercent(locationState) >= 0.99; 
         }
 
-        // Calculate max inventory dynamically including perks
         function getMaxInventory() {
             let cap = gameState.player.inventoryCapacity;
             if (hasPerk('jurong_warehouse')) {
@@ -776,17 +873,17 @@
 
         function checkEndConditions() {
             if (gameState.totalDays && gameState.day > gameState.totalDays) {
-                endGame("Your time is up.", "GAME OVER", "The 30 days are up.");
+                endGame("Time is up.", "GAME OVER", "30 Days Reached.");
                 return true;
             }
             if (gameState.player.cash < 0) {
-                 endGame(`You went bankrupt with $${gameState.player.cash}.`, "BANKRUPT", "The streets have no mercy for bad business.");
+                 endGame(`You went bankrupt with $${gameState.player.cash}.`, "BANKRUPT", "Zero balance.");
                  return true;
             }
             if (gameState.gameMode === 'career') {
                  const allTurfsDominated = gameState.locations.every(l => getPlayerControlPercent(l) >= 1);
                  if (allTurfsDominated) {
-                    endGame("You control the entire city. You are the undisputed kingpin!", "VICTORY!", "You built an empire.");
+                    endGame("You control the entire city.", "KINGPIN", "Total Domination.");
                     return true;
                  }
             }
@@ -810,41 +907,36 @@
 
             if (totalSalary > 0) {
                  gameState.player.cash -= totalSalary;
-                 logMessage(`Paid $${totalSalary} in crew salaries.`);
+                 logMessage(`Paid $${totalSalary} salaries.`);
                  if (checkEndConditions()) return;
             }
             if (totalIncome > 0) {
                  gameState.player.cash += totalIncome;
-                 logMessage(`Your crew generated $${totalIncome} in passive income.`);
+                 logMessage(`Crew earned $${totalIncome}.`);
             }
         }
         
         function handleDebtMechanics() {
-            // Apply Interest
             if (gameState.player.debt > 0) {
                 const interest = Math.ceil(gameState.player.debt * LOAN_INTEREST_RATE);
                 gameState.player.debt += interest;
-                logMessage(`The Ah Long added $${interest} interest to your debt.`, 'error');
+                logMessage(`Debt increased by $${interest}.`, 'error');
             }
 
-            // Consequences
             const creditLimit = BASE_LOAN_LIMIT + (gameState.player.rep * LOAN_REP_MULTIPLIER);
             const debtRatio = gameState.player.debt / creditLimit;
 
             if (gameState.player.debt > 0 && Math.random() < 0.2) {
-                // 20% chance of a warning event
                 if (debtRatio > 2.0) {
                      triggerShake();
                      triggerFlash();
-                     // Extreme Debt: Game Over
-                     showDangerModal("VANISHED", "You owed too much. The Ah Longs took you for a 'boat ride'. You were never seen again.", () => {
+                     showDangerModal("VANISHED", "You owed too much. The Ah Longs took you.", () => {
                          endGame("Killed by Loan Sharks", "M.I.A.", "Pay your debts.");
                      });
                 } else if (debtRatio > 1.2) {
                      triggerShake();
                      triggerFlash();
-                    // High Debt: Seize Inventory
-                    const itemsLost = Math.floor(Math.random() * 10) + 5;
+                    const itemsLost = Math.floor(Math.random() * 10) + 5; /* This var is unused */
                     let itemsRemoved = 0;
                      for (const item in gameState.player.inventory) { 
                          if(gameState.player.inventory[item] > 0) {
@@ -853,12 +945,11 @@
                          }
                      }
                      if (itemsRemoved > 0) {
-                         showDangerModal("RAIDED!", "Runners raided your stash to cover the interest. Inventory lost.", () => {});
+                         showDangerModal("RAIDED!", "Ah Long raided your stash.", () => {});
                      }
                 } else if (debtRatio > 0.8) {
                      triggerShake();
-                     // Medium Debt: Beat up
-                     showDangerModal("WARNING", "Runners cornered you. 'Pay up or next time we take a finger.'", () => {});
+                     showDangerModal("WARNING", "Runners cornered you. 'Pay up.'", () => {});
                 }
             }
         }
@@ -884,8 +975,7 @@
             if (investmentAmount > 0) {
                 targetLocation.rivalInvestment += investmentAmount;
                 gameState.rival.cash -= investmentAmount;
-                logMessage(`The ${RIVAL.name} is making moves in ${targetLocation.name}!`, 'warning');
-                // Trigger Flash for Attack
+                logMessage(`${RIVAL.name} moving in on ${targetLocation.name}!`, 'warning');
                 triggerFlash();
             }
         }
@@ -951,14 +1041,12 @@
             const playerControl = getPlayerControlPercent(destination);
             let currentRisk = destination.baseRisk * (1 - playerControl);
 
-            // Perk: Yishun Safety
             if (hasPerk('yishun_safety')) {
                 currentRisk *= 0.5; 
             }
 
             if (Math.random() < currentRisk) { handleMugging(newLocationName); return; }
             
-            // Perk: Woodlands Gateway
             let cnbChance = CNB_ENCOUNTER_CHANCE;
             if (hasPerk('woodlands_gateway')) {
                 cnbChance *= 0.5; 
@@ -971,40 +1059,40 @@
         function completeTravel(newLocationName) {
             if (gameState.player.currentLocation !== newLocationName) {
                 gameState.player.currentLocation = newLocationName;
-                logMessage(`You took a Grab to ${newLocationName}. A day has passed.`);
+                logMessage(`Travelled to ${newLocationName}.`);
                 advanceDay();
-            } else { logMessage(`You are already in ${newLocationName}.`); render(); }
+            } else { logMessage(`Already in ${newLocationName}.`); render(); }
         }
         
         function handleMugging(newLocationName) {
-            triggerShake(); // JUICE
-            triggerFlash(); // JUICE
+            triggerShake(); 
+            triggerFlash(); 
             const cashLost = Math.floor(gameState.player.cash * (0.1 + Math.random() * 0.15));
             gameState.player.cash -= cashLost;
-            const headline = `You were mugged on the way to ${newLocationName} and lost $${cashLost}!`;
-            showDangerModal('MUGGED!', headline, () => completeTravel(newLocationName));
+            const headline = `Mugged en route to ${newLocationName}. Lost $${cashLost}.`;
+            showDangerModal('MUGGED', headline, () => completeTravel(newLocationName));
             if (checkEndConditions()) return;
         }
 
         function handleCnbEncounter(newLocationName) {
             const outcome = Math.random();
             let headline = '';
-            triggerShake(); // JUICE
+            triggerShake(); 
             if (outcome < 0.1) {
-                triggerFlash(); // JUICE
-                headline = `You were caught by the CNB! It's all over.`;
-                const endGameCallback = () => endGame("You were arrested by the CNB.", "BUSTED", "The long arm of the law finally caught up.");
-                showDangerModal('BUSTED!', headline, endGameCallback);
+                triggerFlash(); 
+                headline = `Caught by CNB. Game Over.`;
+                const endGameCallback = () => endGame("Arrested by CNB.", "BUSTED", "Locked Up.");
+                showDangerModal('BUSTED', headline, endGameCallback);
             } else if (outcome < 0.5) {
-                triggerFlash(); // JUICE
-                headline = `The CNB stopped you for a 'random' check. They took all your goods!`;
+                triggerFlash(); 
+                headline = `CNB raid. Goods confiscated.`;
                 for (const item in gameState.player.inventory) { gameState.player.inventory[item] = 0; }
-                showDangerModal('CONFISCATED!', headline, () => completeTravel(newLocationName));
+                showDangerModal('CONFISCATED', headline, () => completeTravel(newLocationName));
             } else {
                 const fine = Math.min(gameState.player.cash, 500 + Math.floor(Math.random() * 500));
                 gameState.player.cash -= fine;
-                headline = `You ran into a CNB roadblock. You managed to talk your way out, but it cost you a $${fine} 'fine'.`;
-                showDangerModal('SHAKEDOWN!', headline, () => completeTravel(newLocationName));
+                headline = `Roadblock. Bribed way out for $${fine}.`;
+                showDangerModal('BRIBE', headline, () => completeTravel(newLocationName));
             }
             if (checkEndConditions()) return;
         }
@@ -1018,7 +1106,7 @@
             const totalInventory = calculateTotalInventory();
             const maxCap = getMaxInventory();
             if (totalInventory + quantity > maxCap) {
-                logMessage("Not enough space in your inventory.", 'error'); return;
+                logMessage("No space in bag.", 'error'); return;
             }
             const currentLocationData = gameState.locations.find(l => l.name === gameState.player.currentLocation);
             const price = currentLocationData.market[itemName];
@@ -1031,8 +1119,8 @@
             }
 
             const cost = adjustedPrice * quantity;
-            if (cost > gameState.player.cash) { logMessage("Not enough cash, boss.", 'error'); return; }
-            if(quantity <= 0 || !Number.isInteger(quantity)) { logMessage("Invalid quantity.", 'error'); return; }
+            if (cost > gameState.player.cash) { logMessage("Not enough cash.", 'error'); return; }
+            if(quantity <= 0 || !Number.isInteger(quantity)) { logMessage("Invalid amount.", 'error'); return; }
             
             gameState.player.cash -= cost;
             gameState.player.inventory[itemName] += quantity;
@@ -1042,7 +1130,7 @@
             log.totalQuantity += quantity;
             
             logMessage(`Bought ${quantity} ${itemName} for $${cost}.`);
-            showFloatingText(`-$${cost}`, 'text-red-500'); // JUICE
+            showFloatingText(`-$${cost}`, 'text-red-500'); 
 
             render();
             checkEndConditions();
@@ -1050,8 +1138,8 @@
         }
 
         function sellItem(itemName, quantity) {
-            if (quantity > gameState.player.inventory[itemName]) { logMessage(`You don't have that many ${itemName} to sell.`, 'error'); return; }
-            if(quantity <= 0 || !Number.isInteger(quantity)) { logMessage("Invalid quantity.", 'error'); return; }
+            if (quantity > gameState.player.inventory[itemName]) { logMessage(`Don't have it.`, 'error'); return; }
+            if(quantity <= 0 || !Number.isInteger(quantity)) { logMessage("Invalid amount.", 'error'); return; }
             
             const currentLocationData = gameState.locations.find(l => l.name === gameState.player.currentLocation);
             const price = currentLocationData.market[itemName];
@@ -1080,7 +1168,7 @@
             gameState.player.cash += earnings;
             gameState.player.inventory[itemName] -= quantity;
             logMessage(`Sold ${quantity} ${itemName} for $${earnings}.`);
-            showFloatingText(`+$${earnings}`, 'text-green-400'); // JUICE
+            showFloatingText(`+$${earnings}`, 'text-[#b8ff01]');
 
             render();
             checkEndConditions();
@@ -1089,7 +1177,7 @@
         
         function investInTurf(amount) {
             if(amount <= 0 || !Number.isInteger(amount) || amount > gameState.player.cash) {
-                logMessage("Invalid amount or not enough cash.", 'error');
+                logMessage("Invalid amount.", 'error');
                 return;
             }
             const location = gameState.locations.find(l => l.name === gameState.player.currentLocation);
@@ -1099,9 +1187,9 @@
             gameState.player.rep += repGained;
             location.playerInvestment += amount;
             
-            logMessage(`You invested $${amount} into ${location.name}, gaining ${repGained} reputation.`);
-            showFloatingText(`+${repGained} Rep`, 'text-purple-400'); // JUICE
-            showFloatingText(`-$${amount}`, 'text-red-500'); // JUICE
+            logMessage(`Invested $${amount} in ${location.name}. +${repGained} REP.`);
+            showFloatingText(`+${repGained} REP`, 'text-[#ff90e8]');
+            showFloatingText(`-$${amount}`, 'text-red-500');
 
             render();
             checkEndConditions();
@@ -1113,13 +1201,13 @@
             const lieutenantBlueprint = LIEUTENANTS_BLUEPRINT[0];
             
             if (gameState.player.cash < lieutenantBlueprint.hireCost) {
-                logMessage("Not enough cash to hire a lieutenant.", 'error'); return;
+                logMessage("Cannot afford.", 'error'); return;
             }
 
             gameState.player.cash -= lieutenantBlueprint.hireCost;
             location.lieutenant = lieutenantBlueprint.name;
-            logMessage(`You've hired a ${lieutenantBlueprint.name} to run ${location.name}!`);
-            showFloatingText(`-$${lieutenantBlueprint.hireCost}`, 'text-red-500'); // JUICE
+            logMessage(`Hired lieutenant for ${location.name}!`);
+            showFloatingText(`-$${lieutenantBlueprint.hireCost}`, 'text-red-500');
 
             lieutenantModal.classList.add('hidden');
             showTurfModal(); 
@@ -1136,15 +1224,15 @@
                 gameState.player.cash -= nextUpgrade.cost;
                 gameState.player.currentUpgradeIndex = nextUpgradeIndex;
                 gameState.player.inventoryCapacity = nextUpgrade.capacity;
-                logMessage(`Upgraded to a ${nextUpgrade.name}! Your capacity is now ${nextUpgrade.capacity}.`);
-                showFloatingText(`-$${nextUpgrade.cost}`, 'text-red-500'); // JUICE
+                logMessage(`Bought ${nextUpgrade.name}. Capacity: ${nextUpgrade.capacity}.`);
+                showFloatingText(`-$${nextUpgrade.cost}`, 'text-red-500'); 
 
                 render();
                 hideModals();
                 checkEndConditions();
                 saveGame(); 
             } else {
-                logMessage("Not enough cash for the upgrade.", 'error');
+                logMessage("Too expensive.", 'error');
             }
         }
         
@@ -1169,14 +1257,14 @@
             
             const creditLimit = calculateCreditLimit();
             if (gameState.player.debt + amount > creditLimit) {
-                showToast("Limit Exceeded!", true);
+                showToast("Over Limit!", true);
                 return;
             }
 
             gameState.player.cash += amount;
             gameState.player.debt += amount;
-            logMessage(`Borrowed $${amount}. Interest ticks daily.`, 'warning');
-            showFloatingText(`+$${amount}`, 'text-green-400'); // JUICE
+            logMessage(`Borrowed $${amount}. Clock ticking.`, 'warning');
+            showFloatingText(`+$${amount}`, 'text-[#b8ff01]');
 
             showFinanceModal(); 
             render();
@@ -1188,17 +1276,16 @@
             if (isNaN(amount) || amount <= 0) { showToast("Invalid Amount", true); return; }
 
             if (amount > gameState.player.cash) {
-                 showToast("Not enough cash!", true);
+                 showToast("Too Poor!", true);
                  return;
             }
             
-            // Cap repayment at debt amount
             const actualRepay = Math.min(amount, gameState.player.debt);
             
             gameState.player.cash -= actualRepay;
             gameState.player.debt -= actualRepay;
-            logMessage(`Repaid $${actualRepay} to the Ah Long.`);
-            showFloatingText(`-$${actualRepay}`, 'text-red-500'); // JUICE
+            logMessage(`Repaid $${actualRepay}.`);
+            showFloatingText(`-$${actualRepay}`, 'text-red-500');
 
             showFinanceModal(); 
             render();
@@ -1207,11 +1294,21 @@
 
         
         function logMessage(message, type = 'info') {
-            logMessageEl.textContent = `> ${message}`;
-            logMessageEl.classList.remove('text-red-500', 'text-green-400', 'text-amber-400');
-            if (type === 'error') { logMessageEl.classList.add('text-red-500'); } 
-            else if (type === 'info') { logMessageEl.classList.add('text-green-400'); }
-            else if (type === 'warning') { logMessageEl.classList.add('text-amber-400'); }
+            // Create new log line
+            const line = document.createElement('p');
+            line.textContent = `> ${message}`;
+            
+            if (type === 'error') line.className = "text-red-500 font-bold";
+            else if (type === 'info') line.className = "text-green-400";
+            else if (type === 'warning') line.className = "text-yellow-400 font-bold";
+            
+            // Prepend to keep newest at top if you prefer, or append and scroll
+            logMessageEl.insertBefore(line, logMessageEl.firstChild);
+            
+            // Optional: remove old logs to save memory
+            if (logMessageEl.children.length > 50) {
+                logMessageEl.removeChild(logMessageEl.lastChild);
+            }
         }
         
         function endGame(reason, title, subtitle) {
@@ -1220,7 +1317,7 @@
             document.getElementById('final-cash').textContent = `$${gameState.player.cash.toLocaleString()}`;
             document.getElementById('game-over-reason').textContent = reason;
             gameOverModal.classList.remove('hidden');
-            localStorage.removeItem(SAVE_KEY); // Wipe save on game over
+            localStorage.removeItem(SAVE_KEY); 
         }
 
         // --- UI & RENDERING ---
@@ -1236,13 +1333,12 @@
                 playerDebtEl.textContent = '$0';
             }
 
-            const dayDisplay = gameState.totalDays ? `${gameState.day} / ${gameState.totalDays}` : `Day ${gameState.day}`;
+            const dayDisplay = gameState.totalDays ? `${gameState.day}/${gameState.totalDays}` : `D:${gameState.day}`;
             daysLeftEl.textContent = dayDisplay;
             
             const totalInventory = calculateTotalInventory();
-            // UPDATED: Show dynamic max capacity
             const maxCap = getMaxInventory();
-            playerInventoryStatusEl.textContent = `${totalInventory} / ${maxCap}`;
+            playerInventoryStatusEl.textContent = `${totalInventory}/${maxCap}`;
             
             const currentLocationData = gameState.locations.find(l => l.name === gameState.player.currentLocation);
             const playerControlPercent = getPlayerControlPercent(currentLocationData) * 100;
@@ -1251,40 +1347,44 @@
 
             marketListEl.innerHTML = '';
             const market = currentLocationData.market;
-            ITEMS.forEach(item => {
+            ITEMS.forEach((item, index) => {
                 const price = market[item.name];
                 const inventoryCount = gameState.player.inventory[item.name];
                 let priceIndicator = '';
                 const previousPrices = gameState.previousMarket[currentLocationData.name];
                 if (previousPrices && Object.keys(previousPrices).length > 0) {
                     const previousPrice = previousPrices[item.name];
-                    if (price > previousPrice) { priceIndicator = `<span class="text-lime-400 text-lg ml-2">▲</span>`; } 
-                    else if (price < previousPrice) { priceIndicator = `<span class="text-red-500 text-lg ml-2">▼</span>`; }
+                    if (price > previousPrice) { priceIndicator = `<span class="text-red-600 ml-1">▲</span>`; } 
+                    else if (price < previousPrice) { priceIndicator = `<span class="text-green-600 ml-1">▼</span>`; }
                 }
 
                 const log = gameState.player.purchaseLog[item.name];
                 let avgPriceText = '';
                 if (inventoryCount > 0 && log && log.totalQuantity > 0) {
                     const avgPrice = log.totalCost / log.totalQuantity;
-                    avgPriceText = `<span class="text-xs text-gray-400 ml-2">(Avg: $${avgPrice.toFixed(2)})</span>`;
+                    avgPriceText = `<span class="text-[10px] text-gray-500 ml-1 block">AVG: $${avgPrice.toFixed(0)}</span>`;
                 }
 
                 const itemEl = document.createElement('div');
-                // FIXED: Changed from md:grid-cols-4 to md:grid-cols-6 for better spacing
-                itemEl.className = 'grid grid-cols-2 md:grid-cols-6 items-center gap-2 p-2 bg-black pixel-corners border border-gray-800';
+                itemEl.className = 'market-item p-3 flex items-center justify-between bg-white';
+                if (index % 2 === 0) itemEl.style.backgroundColor = "#f9fafb";
+                
                 itemEl.innerHTML = `
-                    <div class="col-span-2 md:col-span-3">
-                        <p class="text-lg md:text-xl text-white">${item.name}</p>
-                        <p class="text-xs md:text-sm text-gray-400">You have: ${inventoryCount} ${avgPriceText}</p>
+                    <div class="flex-grow">
+                        <div class="flex items-baseline gap-2">
+                            <h3 class="text-lg font-black uppercase">${item.name}</h3>
+                            ${inventoryCount > 0 ? `<span class="bg-black text-white text-[10px] px-1 font-bold">${inventoryCount}</span>` : ''}
+                        </div>
+                        ${avgPriceText}
                     </div>
                     
-                    <div class="col-span-1 md:col-span-1 flex justify-start md:justify-center">
-                        <p class="text-lg md:text-xl text-green-400 font-bold">$${price}${priceIndicator}</p>
+                    <div class="text-right mr-4">
+                        <div class="text-xl font-mono font-bold tracking-tighter">$${price}${priceIndicator}</div>
                     </div>
 
-                    <div class="col-span-1 md:col-span-2 flex justify-end gap-2">
-                        <button data-action="buy" data-item="${item.name}" class="flex-1 btn-pixel pixel-corners border-green-500 text-sm px-2 py-2">BUY</button>
-                        <button data-action="sell" data-item="${item.name}" class="flex-1 btn-pixel pixel-corners border-yellow-500 text-sm px-2 py-2" ${inventoryCount === 0 ? 'disabled' : ''}>SELL</button>
+                    <div class="flex gap-2">
+                        <button data-action="buy" data-item="${item.name}" class="btn-neo bg-[#b8ff01] px-3 py-2 text-xs border-2 shadow-[2px_2px_0px_0px_#000]">BUY</button>
+                        <button data-action="sell" data-item="${item.name}" class="btn-neo bg-[#ffce00] px-3 py-2 text-xs border-2 shadow-[2px_2px_0px_0px_#000]" ${inventoryCount === 0 ? 'disabled' : ''}>SELL</button>
                     </div>
                 `;
                 marketListEl.appendChild(itemEl);
@@ -1318,15 +1418,12 @@
 
         function showEventModal() {
             document.getElementById('event-headline').textContent = gameState.currentEvent.headline;
-            // Reset title back to default if it was changed by Intel
-            document.getElementById('event-title').textContent = "Daily News";
-            document.getElementById('event-title').className = "text-4xl text-amber-400 mb-4"; 
+            document.getElementById('event-title').textContent = "NEWS";
             eventModal.classList.remove('hidden');
         }
 
         function showTransactionModal(type, itemName) {
             const totalInventory = calculateTotalInventory();
-            // UPDATED: Use dynamic max capacity
             const maxCap = getMaxInventory();
             const spaceLeft = maxCap - totalInventory;
             document.getElementById('modal-space-left').textContent = `${spaceLeft}`;
@@ -1338,7 +1435,6 @@
             
             const priceBonus = getTurfPriceBonus(currentLocationData);
             
-            // Apply Perk Checks for Modal Price Display
             let baseAdjusted = price * (type === 'Buy' ? (1 - priceBonus) : (1 + priceBonus));
             if (type === 'Buy' && hasPerk('geylang_discount')) {
                  baseAdjusted *= 0.9;
@@ -1348,15 +1444,23 @@
             }
 
             const adjustedPrice = Math.round(baseAdjusted);
-            document.getElementById('modal-item-price').textContent = `$${adjustedPrice} (Base: $${price})`;
+            document.getElementById('modal-item-price').textContent = `$${adjustedPrice}`;
 
             document.getElementById('modal-item-inventory').textContent = inventory;
             document.getElementById('quantity').value = '';
             const confirmBtn = document.getElementById('modal-confirm-button');
             confirmBtn.dataset.type = type;
             confirmBtn.dataset.item = itemName;
-            if (type === 'Buy') { buyMaxBtn.style.display = 'block'; sellAllBtn.style.display = 'none'; } 
-            else if (type === 'Sell') { buyMaxBtn.style.display = 'none'; sellAllBtn.style.display = 'block'; }
+            
+            if (type === 'Buy') { 
+                buyMaxBtn.style.display = 'block'; 
+                sellAllBtn.style.display = 'none'; 
+                confirmBtn.className = "flex-1 btn-neo bg-[#b8ff01] py-3 text-lg"; // Green for buy
+            } else if (type === 'Sell') { 
+                buyMaxBtn.style.display = 'none'; 
+                sellAllBtn.style.display = 'block'; 
+                confirmBtn.className = "flex-1 btn-neo bg-[#ffce00] py-3 text-lg"; // Yellow for sell
+            }
             transactionModal.classList.remove('hidden');
             document.getElementById('quantity').focus();
         }
@@ -1367,8 +1471,8 @@
             const otherLocations = gameState.locations.filter(l => l.name !== gameState.player.currentLocation);
             otherLocations.forEach(loc => {
                 const button = document.createElement('button');
-                button.textContent = loc.name;
-                button.className = 'w-full btn-pixel pixel-corners border-green-500 py-3';
+                button.innerHTML = `<span class="font-bold">${loc.name}</span>`;
+                button.className = 'w-full btn-neo bg-white py-3 border-2 text-left px-4 hover:bg-blue-100';
                 button.onclick = () => travel(loc.name);
                 travelOptionsEl.appendChild(button);
             });
@@ -1383,7 +1487,7 @@
 
             if (nextUpgradeIndex < UPGRADES.length) {
                 const nextUpgrade = UPGRADES[nextUpgradeIndex];
-                document.getElementById('upgrade-name').textContent = `Next: ${nextUpgrade.name}`;
+                document.getElementById('upgrade-name').textContent = nextUpgrade.name;
                 document.getElementById('upgrade-capacity').textContent = nextUpgrade.capacity;
                 document.getElementById('upgrade-cost').textContent = `$${nextUpgrade.cost.toLocaleString()}`;
                 upgradeInfoEl.style.display = 'block';
@@ -1399,10 +1503,9 @@
 
         function showTurfModal() {
             const location = gameState.locations.find(l => l.name === gameState.player.currentLocation);
-            // FIND THE BLUEPRINT FOR THIS LOCATION to get Perk Data
             const blueprint = LOCATIONS_BLUEPRINT.find(l => l.name === location.name);
 
-            document.getElementById('rival-name').textContent = `${gameState.rival.name.toUpperCase()} CONTROL`;
+            document.getElementById('rival-name').textContent = `${gameState.rival.name.toUpperCase()}`;
             const playerControlPercent = getPlayerControlPercent(location);
             const rivalControlPercent = 1 - playerControlPercent;
 
@@ -1410,7 +1513,6 @@
             document.getElementById('turf-modal-rival-level').textContent = `${(rivalControlPercent * 100).toFixed(1)}%`;
             document.getElementById('turf-control-bar').style.width = `${playerControlPercent * 100}%`;
             
-            // Update Strategic Perk Section
             const perkSection = document.getElementById('turf-perk-section');
             perkSection.classList.remove('hidden');
             document.getElementById('turf-perk-name').textContent = blueprint.perkName;
@@ -1418,24 +1520,22 @@
             const perkStatus = document.getElementById('turf-perk-status');
             
             if (playerControlPercent >= 0.99) {
-                perkStatus.textContent = "ACTIVE (GLOBAL)";
-                perkStatus.className = "text-green-400 text-xs mt-1 font-bold";
-                perkSection.className = "mb-4 p-3 border border-green-600 bg-green-900 bg-opacity-20";
+                perkStatus.textContent = "ACTIVE";
+                perkStatus.className = "text-xs mt-2 font-black text-[#b8ff01] bg-black inline-block px-1";
             } else {
-                perkStatus.textContent = "LOCKED (Requires 100% Control)";
-                perkStatus.className = "text-red-400 text-xs mt-1 font-bold";
-                perkSection.className = "mb-4 p-3 border border-gray-600 bg-black bg-opacity-50";
+                perkStatus.textContent = "LOCKED";
+                perkStatus.className = "text-xs mt-2 font-bold text-gray-400";
             }
 
             document.getElementById('invest-amount').value = '';
 
             const lieutenantStatusEl = document.getElementById('lieutenant-status');
             if (location.lieutenant) {
-                lieutenantStatusEl.innerHTML = `<p class="text-cyan-300">${location.lieutenant} is running this turf.</p>`;
+                lieutenantStatusEl.innerHTML = `<p class="text-blue-600 font-bold uppercase">${location.lieutenant} <span class="text-black text-xs">RUNNING OPS</span></p>`;
             } else if (playerControlPercent >= LIEUTENANT_HIRE_THRESHOLD) {
-                 lieutenantStatusEl.innerHTML = `<button id="recruit-lieutenant-button" class="w-full btn-pixel pixel-corners border-cyan-500 py-2">Recruit Lieutenant</button>`;
+                 lieutenantStatusEl.innerHTML = `<button id="recruit-lieutenant-button" class="w-full btn-neo bg-[#23f0c7] py-2 text-sm">RECRUIT LT</button>`;
             } else {
-                lieutenantStatusEl.innerHTML = `<p class="text-xs text-gray-500">Increase your control to 75% to recruit a lieutenant.</p>`;
+                lieutenantStatusEl.innerHTML = `<p class="text-xs text-gray-500 font-mono">Need 75% control to recruit.</p>`;
             }
 
             turfModal.classList.remove('hidden');
@@ -1443,11 +1543,11 @@
         }
         
         function showLieutenantModal() {
-            const blueprint = LIEUTENANTS_BLUEPRINT[0]; // Only one type for now
+            const blueprint = LIEUTENANTS_BLUEPRINT[0]; 
             document.getElementById('lieutenant-name').textContent = blueprint.name;
             document.getElementById('lieutenant-description').textContent = blueprint.description;
-            document.getElementById('lieutenant-benefit').textContent = `$${blueprint.benefit} passive income per day`;
-            document.getElementById('lieutenant-salary').textContent = `$${blueprint.salary} / day`;
+            document.getElementById('lieutenant-benefit').textContent = `$${blueprint.benefit}`;
+            document.getElementById('lieutenant-salary').textContent = `$${blueprint.salary}`;
             document.getElementById('lieutenant-cost').textContent = `$${blueprint.hireCost.toLocaleString()}`;
             document.getElementById('lieutenant-confirm-button').disabled = gameState.player.cash < blueprint.hireCost;
             lieutenantModal.classList.remove('hidden');
@@ -1461,17 +1561,11 @@
              gameModeModal.classList.add('hidden');
              gameContainer.classList.remove('hidden');
              
-             if (gameMode === 'blitz') {
-                gameModeTaglineEl.textContent = '30 days to make your fortune. Don\'t get caught.';
-             } else {
-                gameModeTaglineEl.textContent = 'Build your empire. Achieve total control.';
-             }
-
              hideModals();
              gameOverModal.classList.add('hidden');
              advanceDay(); 
-             logMessage(`Welcome, boss. You start with a ${UPGRADES[0].name}.`);
-             saveGame(); // Initial save
+             logMessage(`Welcome. Gear: ${UPGRADES[0].name}.`);
+             saveGame(); 
         }
         
         function resetToMainMenu() {
@@ -1494,7 +1588,7 @@
             const type = document.getElementById('modal-confirm-button').dataset.type;
             const item = document.getElementById('modal-confirm-button').dataset.item;
             const quantity = parseInt(document.getElementById('quantity').value, 10);
-            if (isNaN(quantity) || quantity < 1) { logMessage('Please enter a valid amount.', 'error'); return; }
+            if (isNaN(quantity) || quantity < 1) { logMessage('Enter amount.', 'error'); return; }
             if (type === 'Buy') { buyItem(item, quantity); } 
             else if (type === 'Sell') { sellItem(item, quantity); }
             hideModals();
@@ -1511,6 +1605,7 @@
         document.getElementById('turf-button').addEventListener('click', showTurfModal);
         document.getElementById('turf-cancel-button').addEventListener('click', hideModals);
         document.getElementById('analyze-market-btn').addEventListener('click', askTheStreets);
+        document.getElementById('danger-close-button').addEventListener('click', hideModals); // Fallback closing
         
         // Event Delegation for Lieutenant Recruit Button
         document.getElementById('lieutenant-status').addEventListener('click', (e) => {
@@ -1524,14 +1619,13 @@
         
         document.getElementById('turf-confirm-button').addEventListener('click', () => {
             const amount = parseInt(document.getElementById('invest-amount').value, 10);
-            if(isNaN(amount) || amount <= 0) { logMessage('Please enter a valid investment.', 'error'); return; }
+            if(isNaN(amount) || amount <= 0) { logMessage('Enter amount.', 'error'); return; }
             investInTurf(amount);
             showTurfModal();
         });
 
         buyMaxBtn.addEventListener('click', () => {
             const totalInventory = calculateTotalInventory();
-            // UPDATED: Use dynamic max capacity
             const maxCap = getMaxInventory();
             const spaceLeft = maxCap - totalInventory;
             
@@ -1541,7 +1635,6 @@
             const priceBonus = getTurfPriceBonus(currentLocationData);
             let adjustedPrice = Math.round(price * (1 - priceBonus));
             
-            // NEW: Discount check for Buy Max
             if (hasPerk('geylang_discount')) {
                 adjustedPrice = Math.round(adjustedPrice * 0.9);
             }
@@ -1563,7 +1656,7 @@
         document.getElementById('system-menu-button').addEventListener('click', () => systemModal.classList.remove('hidden'));
         document.getElementById('system-close-button').addEventListener('click', hideModals);
         document.getElementById('manual-save-button').addEventListener('click', () => { saveGame(); hideModals(); });
-        document.getElementById('reset-run-button').addEventListener('click', () => { endGame("You forfeited the run.", "FORFEIT", "Better luck next time."); hideModals(); });
+        document.getElementById('reset-run-button').addEventListener('click', () => { endGame("You forfeited.", "FORFEIT", "Weak."); hideModals(); });
         document.getElementById('wipe-save-button').addEventListener('click', wipeSave);
         
         // Finance Listeners
