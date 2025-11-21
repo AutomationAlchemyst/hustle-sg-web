@@ -772,32 +772,31 @@
             Format: "Eh boss, [Advice]."`;
 
             try {
-                // The backend is now modified to list models, so the method and body are not needed
                 const response = await fetch('/api/analyze', {
-                    method: 'POST', // Keep POST to satisfy the handler's check
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: "List models" }) // Send dummy prompt
+                    body: JSON.stringify({ prompt: prompt })
                 });
                 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error("API Error Response:", errorData);
                     throw new Error('API Error');
                 }
 
                 const data = await response.json();
-                console.log("--- AVAILABLE MODELS ---");
-                console.log(data);
+                const advice = data.candidates[0].content.parts[0].text;
                 
-                // Show a message to the user to check the console
-                document.getElementById('event-title').textContent = "DEBUGGING";
-                document.getElementById('event-headline').textContent = "Model list logged to browser console. Please copy it.";
+                gameState.player.cash -= 50;
+                logMessage(`Paid $50 for intel.`);
+                render(); 
+                
+                document.getElementById('event-title').textContent = "STREET INTEL";
+                document.getElementById('event-headline').textContent = advice;
                 eventModal.classList.remove('hidden');
 
             } catch (error) {
                 console.error(error);
-                logMessage("Debug check failed.", 'error');
-                showToast("Debug check failed", true);
+                logMessage("Informant is silent.", 'error');
+                showToast("Intel unavailable", true);
             } finally {
                 btn.innerHTML = originalContent;
                 btn.disabled = false;
