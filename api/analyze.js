@@ -3,6 +3,7 @@ export const config = {
 };
 
 export default async function handler(req) {
+    console.log("--- ANALYZE FUNCTION STARTED ---");
     // 1. CORS Headers (Optional but good practice if you expand later)
     const corsHeaders = {
         "Access-Control-Allow-Origin": "*",
