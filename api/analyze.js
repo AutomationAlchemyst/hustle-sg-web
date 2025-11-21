@@ -22,9 +22,6 @@ export default async function handler(req) {
     }
 
     try {
-        // 3. Parse the incoming data from the game
-        const { prompt } = await req.json();
-        
         // 4. Get the secret key from Vercel's environment (The Safe)
         const apiKey = process.env.GEMINI_API_KEY;
 
@@ -35,13 +32,9 @@ export default async function handler(req) {
             });
         }
 
-        // 5. Call Google Gemini securely from the server
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }]
-            })
+        // 5. Call Google Gemini to LIST MODELS for debugging
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`, {
+            method: 'GET',
         });
 
         if (!response.ok) {
@@ -58,7 +51,7 @@ export default async function handler(req) {
 
     } catch (error) {
         console.error(error);
-        return new Response(JSON.stringify({ error: 'Failed to fetch intel' }), { 
+        return new Response(JSON.stringify({ error: error.message }), { 
             status: 500,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
